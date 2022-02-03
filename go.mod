@@ -66,6 +66,7 @@ require (
 	github.com/edsrzf/mmap-go v1.0.0
 	github.com/elastic/gosigar v0.10.0
 	github.com/emicklei/dot v0.15.0
+	github.com/fabianlindfors/clockbound-go v0.0.0-20220119123444-8764db6c5ec0 // indirect
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a
 	github.com/ghemawat/stream v0.0.0-20171120220530-696b145b53b9
 	github.com/go-sql-driver/mysql v1.5.0
