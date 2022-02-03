@@ -22,6 +22,7 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/log"
 	"github.com/cockroachdb/cockroach/pkg/util/syncutil"
 	"github.com/cockroachdb/cockroach/pkg/util/timeutil"
+	"github.com/fabianlindfors/clockbound-go"
 	"github.com/cockroachdb/errors"
 )
 
@@ -70,6 +71,7 @@ type Clock struct {
 	// the check is disabled. The field is accessed atomically.
 	forwardClockJumpCheckEnabled int32
 
+	clockbound *clockbound.Clock
 	mu struct {
 		syncutil.Mutex
 
@@ -196,9 +198,14 @@ func UnixNano() int64 {
 // A value of 0 for maxOffset means that clock skew checking, if performed on
 // this clock by RemoteClockMonitor, is disabled.
 func NewClock(physicalClock func() int64, maxOffset time.Duration) *Clock {
+	clockbound, err := clockbound.New()
+	if err != nil {
+		panic(err)
+	}
 	return &Clock{
 		physicalClock: physicalClock,
 		maxOffset:     maxOffset,
+		clockbound:    clockbound,
 	}
 }
 
