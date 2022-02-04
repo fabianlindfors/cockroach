@@ -61,6 +61,7 @@ func (t Timestamp) String() string {
 	// The main problem with the original code was that it would put
 	// a negative sign in the middle (after the decimal point) if
 	// the value happened to be negative.
+	return fmt.Sprintf("[%d.%09d, %d.%09d],%d", t.WallTime/1e9, t.WallTime%1e9, t.WallTimeUpperBound/1e9, t.WallTimeUpperBound%1e9, t.Logical)
 	buf := make([]byte, 0, 21)
 
 	w := t.WallTime
