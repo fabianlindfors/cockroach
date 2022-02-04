@@ -60,6 +60,5 @@ message Timestamp {
   // the == operator). Consider use of the EqOrdering method when testing
   // for equality.
   bool synthetic = 3;
-  uint64 earliest = 4;
-  uint64 latest = 5;
+  int64 wall_time_upper_bound = 4;
 }
