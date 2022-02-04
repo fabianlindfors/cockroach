@@ -41,4 +41,5 @@ message LegacyTimestamp {
   // This ensures that the timestamp encoding does not change across nodes
   // that are and are not aware of this field.
   optional bool synthetic = 3;
+  optional int64 wall_time_upper_bound = 4 [(gogoproto.nullable) = false];
 }

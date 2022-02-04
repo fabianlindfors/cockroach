@@ -324,7 +324,7 @@ func (t Timestamp) ToLegacyTimestamp() LegacyTimestamp {
 	if t.Synthetic {
 		synthetic = &trueBool
 	}
-	return LegacyTimestamp{WallTime: t.WallTime, Logical: t.Logical, Synthetic: synthetic}
+	return LegacyTimestamp{WallTime: t.WallTime, Logical: t.Logical, Synthetic: synthetic, WallTimeUpperBound: t.WallTimeUpperBound}
 }
 
 // ToTimestamp converts a LegacyTimestamp to a Timestamp.
@@ -333,7 +333,7 @@ func (t LegacyTimestamp) ToTimestamp() Timestamp {
 	if t.Synthetic != nil {
 		synthetic = *t.Synthetic
 	}
-	return Timestamp{WallTime: t.WallTime, Logical: t.Logical, Synthetic: synthetic}
+	return Timestamp{WallTime: t.WallTime, Logical: t.Logical, Synthetic: synthetic, WallTimeUpperBound: t.WallTimeUpperBound}
 }
 
 // EqOrdering returns whether the receiver sorts equally to the parameter.
