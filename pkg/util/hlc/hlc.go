@@ -200,6 +200,7 @@ func UnixNano() int64 {
 func NewClock(physicalClock func() int64, maxOffset time.Duration) *Clock {
 	clockbound, err := clockbound.New()
 	if err != nil {
+		log.Error(context.TODO(), err.Error())
 		panic(err)
 	}
 	return &Clock{
@@ -296,6 +297,7 @@ func (c *Clock) getPhysicalClockAndCheck(ctx context.Context) clockbound.Bounds 
 
 	newTime, err := c.clockbound.Now()
 	if err != nil {
+		log.Error(context.TODO(), err.Error())
 		panic(err)
 	}
 
@@ -401,6 +403,7 @@ func (c *Clock) enforceWallTimeWithinBoundLocked() {
 func (c *Clock) PhysicalNow() int64 {
 	bounds, err := c.clockbound.Now()
 	if err != nil {
+		log.Error(context.TODO(), err.Error())
 		panic(err)
 	}
 
