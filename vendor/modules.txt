@@ -594,7 +594,7 @@ github.com/elastic/gosigar/sys/windows
 github.com/emicklei/dot
 # github.com/envoyproxy/protoc-gen-validate v0.1.0
 github.com/envoyproxy/protoc-gen-validate/validate
-# github.com/fabianlindfors/clockbound-go v0.0.0-20220119123444-8764db6c5ec0
+# github.com/fabianlindfors/clockbound-go v0.0.0-20220216093745-6fbf91080e25
 ## explicit
 # github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a
 ## explicit

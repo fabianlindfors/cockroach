@@ -2,6 +2,8 @@ package clockbound
 
 import (
 	"encoding/binary"
+	"fmt"
+	"math/rand"
 	"net"
 	"os"
 	"syscall"
@@ -9,7 +11,7 @@ import (
 )
 
 const defaultSocket = "/run/clockboundd/clockboundd.sock"
-const tempSocket = "/tmp/clockbound-go"
+const tempSocketPrefix = "clockbound-go"
 
 type Clock struct {
 	socket net.Conn
@@ -20,6 +22,8 @@ func New() (*Clock, error) {
 }
 
 func NewWithPath(path string) (*Clock, error) {
+	tempSocket := fmt.Sprintf("/tmp/%s-%s", tempSocketPrefix, randomString())
+
 	if err := os.RemoveAll(tempSocket); err != nil {
 		return nil, err
 	}
@@ -131,4 +135,13 @@ func (c *Clock) After(beforeTime uint64) (bool, error) {
 type Bounds struct {
 	Earliest uint64
 	Latest   uint64
+}
+
+func randomString() string {
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	b := make([]rune, 10)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }

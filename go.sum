@@ -420,6 +420,8 @@ github.com/evanphx/json-patch v4.2.0+incompatible/go.mod h1:50XU6AFN0ol/bzJsmQLi
 github.com/evanphx/json-patch v4.5.0+incompatible/go.mod h1:50XU6AFN0ol/bzJsmQLiYLvXMP4fmwYFNcr97nuDLSk=
 github.com/fabianlindfors/clockbound-go v0.0.0-20220119123444-8764db6c5ec0 h1:hLcxbP6PTbRjr1SMZ3+kudc3E7K+ij+ruFPMn9NvowU=
 github.com/fabianlindfors/clockbound-go v0.0.0-20220119123444-8764db6c5ec0/go.mod h1:IT1yZFsMvQqiBk8xrs3e5JI/bN0aUEziOh7duAB99vs=
+github.com/fabianlindfors/clockbound-go v0.0.0-20220216093745-6fbf91080e25 h1:GZNcoIWFMKxmmrOWJNg/PYrvrlUqicrvIxlTMaURy1Q=
+github.com/fabianlindfors/clockbound-go v0.0.0-20220216093745-6fbf91080e25/go.mod h1:IT1yZFsMvQqiBk8xrs3e5JI/bN0aUEziOh7duAB99vs=
 github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a h1:yDWHCSQ40h88yih2JAcL6Ls/kVkSE8GFACTGVnMPruw=
 github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a/go.mod h1:7Ga40egUymuWXxAe151lTNnCv97MddSOVsjpPPkityA=
 github.com/fanixk/geohash v0.0.0-20150324002647-c1f9b5fa157a h1:Fyfh/dsHFrC6nkX7H7+nFdTd1wROlX/FxEIWVpKYf1U=
