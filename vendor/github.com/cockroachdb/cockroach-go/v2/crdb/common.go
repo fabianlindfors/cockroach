@@ -16,6 +16,9 @@ package crdb
 
 import (
 	"context"
+	"math"
+	"math/rand"
+	"time"
 )
 
 // Tx abstracts the operations needed by ExecuteInTx so that different
@@ -84,5 +87,11 @@ func ExecuteInTx(ctx context.Context, tx Tx, fn func() error) (err error) {
 		if retryCount > maxRetries {
 			return newMaxRetriesExceededError(err, maxRetries)
 		}
+
+		// Perform exponential backoff with jitter
+		const maxBackoff = 100
+		backoff := int32(math.Min(maxBackoff, math.Pow(2, float64(retryCount)))) * 1000
+		jitter := rand.Int31n(backoff / 2)
+		time.Sleep(time.Duration(backoff + jitter) * time.Microsecond)
 	}
 }
