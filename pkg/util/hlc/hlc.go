@@ -23,7 +23,7 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/syncutil"
 	"github.com/cockroachdb/cockroach/pkg/util/timeutil"
 	"github.com/cockroachdb/errors"
-	"github.com/fabianlindfors/clockbound-go"
+	"github.com/fabianlindfors/trueclock"
 )
 
 // TODO(Tobias): Figure out if it would make sense to save some
@@ -71,7 +71,7 @@ type Clock struct {
 	// the check is disabled. The field is accessed atomically.
 	forwardClockJumpCheckEnabled int32
 
-	clockbound *clockbound.Clock
+	trueclock *trueclock.TrueClock
 	mu         struct {
 		syncutil.Mutex
 
@@ -198,7 +198,7 @@ func UnixNano() int64 {
 // A value of 0 for maxOffset means that clock skew checking, if performed on
 // this clock by RemoteClockMonitor, is disabled.
 func NewClock(physicalClock func() int64, maxOffset time.Duration) *Clock {
-	clockbound, err := clockbound.New()
+	trueclock, err := trueclock.New()
 	if err != nil {
 		log.Error(context.TODO(), err.Error())
 		panic(err)
@@ -206,7 +206,7 @@ func NewClock(physicalClock func() int64, maxOffset time.Duration) *Clock {
 	return &Clock{
 		physicalClock: physicalClock,
 		maxOffset:     maxOffset,
-		clockbound:    clockbound,
+		trueclock:    trueclock,
 	}
 }
 
@@ -292,14 +292,10 @@ func (c *Clock) MaxOffset() time.Duration {
 // getPhysicalClockAndCheck reads the physical time as nanos since epoch. It
 // also checks for backwards and forwards jumps, as configured.
 // TODO (fabian): Get timestamp from clockbound instead. Save both earliest and latest bounds.
-func (c *Clock) getPhysicalClockAndCheck(ctx context.Context) clockbound.Bounds {
+func (c *Clock) getPhysicalClockAndCheck(ctx context.Context) trueclock.Bounds {
 	oldTime := atomic.LoadInt64(&c.lastPhysicalTime)
 
-	newTime, err := c.clockbound.Now()
-	if err != nil {
-		log.Error(context.TODO(), err.Error())
-		panic(err)
-	}
+	newTime := c.trueclock.Now()
 
 	lastPhysTime := oldTime
 	// Try to update c.lastPhysicalTime. When multiple updaters race, we want the
@@ -307,18 +303,18 @@ func (c *Clock) getPhysicalClockAndCheck(ctx context.Context) clockbound.Bounds 
 	// updaters with lower clock readings; bail if we interleave with a higher
 	// clock reading.
 	for {
-		if atomic.CompareAndSwapInt64(&c.lastPhysicalTime, lastPhysTime, int64(newTime.Earliest)) {
+		if atomic.CompareAndSwapInt64(&c.lastPhysicalTime, lastPhysTime, newTime.Earliest.UnixNano()) {
 			break
 		}
 		lastPhysTime = atomic.LoadInt64(&c.lastPhysicalTime)
-		if lastPhysTime >= int64(newTime.Earliest) {
+		if lastPhysTime >= newTime.Earliest.UnixNano() {
 			// Someone else updated to a later time than ours.
 			break
 		}
 		// Someone else did an update to an earlier time than what we got in newTime.
 		// So try one more time to update.
 	}
-	c.checkPhysicalClock(ctx, oldTime, int64(newTime.Earliest))
+	c.checkPhysicalClock(ctx, oldTime, newTime.Earliest.UnixNano())
 	return newTime
 }
 
@@ -366,14 +362,14 @@ func (c *Clock) NowAsClockTimestamp() ClockTimestamp {
 	clockBounds := c.getPhysicalClockAndCheck(context.TODO())
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.mu.timestamp.WallTime >= int64(clockBounds.Earliest) {
+	if c.mu.timestamp.WallTime >= clockBounds.Earliest.UnixNano() {
 		// The wall time is ahead, so the logical clock ticks.
 		c.mu.timestamp.Logical++
 	} else {
 		// Use the physical clock, and reset the logical one.
 		// TODO (fabian): Update upper bound as well using clockbound
-		atomic.StoreInt64(&c.mu.timestamp.WallTime, int64(clockBounds.Earliest))
-		atomic.StoreInt64(&c.mu.timestamp.WallTimeUpperBound, int64(clockBounds.Latest))
+		atomic.StoreInt64(&c.mu.timestamp.WallTime, clockBounds.Earliest.UnixNano())
+		atomic.StoreInt64(&c.mu.timestamp.WallTimeUpperBound, clockBounds.Latest.UnixNano())
 		c.mu.timestamp.Logical = 0
 	}
 
@@ -401,13 +397,8 @@ func (c *Clock) enforceWallTimeWithinBoundLocked() {
 // higher clock signals received through Update(). If you want to take them into
 // consideration, use c.Now().GoTime().
 func (c *Clock) PhysicalNow() int64 {
-	bounds, err := c.clockbound.Now()
-	if err != nil {
-		log.Error(context.TODO(), err.Error())
-		panic(err)
-	}
-
-	return int64(bounds.Earliest)
+	bounds := c.trueclock.Now()
+	return bounds.Earliest.UnixNano()
 	// return c.physicalClock()
 }
 
@@ -472,7 +463,7 @@ func IsUntrustworthyRemoteWallTimeError(err error) bool {
 func (c *Clock) UpdateAndCheckMaxOffset(ctx context.Context, rt ClockTimestamp) error {
 	clockBounds := c.getPhysicalClockAndCheck(ctx)
 
-	offset := time.Duration(rt.WallTime - int64(clockBounds.Earliest))
+	offset := time.Duration(rt.WallTime - clockBounds.Earliest.UnixNano())
 	if c.maxOffset > 0 && offset > c.maxOffset {
 		return errors.Mark(
 			errors.Errorf("remote wall time is too far ahead (%s) to be trustworthy", offset),
@@ -480,8 +471,8 @@ func (c *Clock) UpdateAndCheckMaxOffset(ctx context.Context, rt ClockTimestamp) 
 		)
 	}
 
-	if int64(clockBounds.Earliest) > rt.WallTime {
-		c.Update(ClockTimestamp{WallTime: int64(clockBounds.Earliest), WallTimeUpperBound: int64(clockBounds.Latest)})
+	if clockBounds.Earliest.UnixNano() > rt.WallTime {
+		c.Update(ClockTimestamp{WallTime: clockBounds.Earliest.UnixNano(), WallTimeUpperBound: clockBounds.Latest.UnixNano()})
 	} else {
 		c.Update(rt)
 	}

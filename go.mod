@@ -11,7 +11,7 @@ require (
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.2
 	github.com/Azure/go-autorest/autorest/to v0.4.0
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
-	github.com/BurntSushi/toml v0.3.1
+	github.com/BurntSushi/toml v0.4.1
 	github.com/DataDog/datadog-go v4.4.0+incompatible // indirect
 	github.com/DataDog/zstd v1.4.8 // indirect
 	github.com/MichaelTJones/walk v0.0.0-20161122175330-4748e29d5718
@@ -66,7 +66,7 @@ require (
 	github.com/edsrzf/mmap-go v1.0.0
 	github.com/elastic/gosigar v0.10.0
 	github.com/emicklei/dot v0.15.0
-	github.com/fabianlindfors/clockbound-go v0.0.0-20220216093745-6fbf91080e25 // indirect
+	github.com/fabianlindfors/trueclock v0.0.0-20220308120951-1c7f4db2daf4
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a
 	github.com/ghemawat/stream v0.0.0-20171120220530-696b145b53b9
 	github.com/go-sql-driver/mysql v1.5.0
@@ -116,7 +116,7 @@ require (
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/maruel/panicparse v1.1.2-0.20180806203336-f20d4c4d746f
 	github.com/marusama/semaphore v0.0.0-20190110074507-6952cef993b2
-	github.com/mattn/go-isatty v0.0.12
+	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/goveralls v0.0.2
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mibk/dupl v1.0.0
@@ -126,7 +126,7 @@ require (
 	github.com/montanaflynn/stats v0.6.3
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/nlopes/slack v0.4.0
-	github.com/olekukonko/tablewriter v0.0.5-0.20200416053754-163badb3bac6
+	github.com/olekukonko/tablewriter v0.0.5
 	github.com/onsi/gomega v1.10.3 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.1
@@ -148,7 +148,7 @@ require (
 	github.com/russross/blackfriday v1.6.0 // indirect
 	github.com/sasha-s/go-deadlock v0.2.0
 	github.com/shirou/gopsutil v2.20.9+incompatible
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
 	github.com/twpayne/go-geom v1.3.7-0.20210228220813-9d9885b50d3e
@@ -159,15 +159,15 @@ require (
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/exp v0.0.0-20210514180818-737f94c0881e
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
+	golang.org/x/net v0.0.0-20211209124913-491a49abca63
 	golang.org/x/oauth2 v0.0.0-20210810183815-faf39c7919d5
 	golang.org/x/perf v0.0.0-20180704124530-6e6d33e29852
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e
+	golang.org/x/sys v0.0.0-20211210111614-af8b64212486
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1
 	golang.org/x/text v0.3.7
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
-	golang.org/x/tools v0.1.5
+	golang.org/x/tools v0.1.7
 	google.golang.org/api v0.52.0
 	google.golang.org/genproto v0.0.0-20210811021853-ddbe55d93216
 	google.golang.org/grpc v1.39.1
@@ -176,7 +176,7 @@ require (
 	gopkg.in/DataDog/dd-trace-go.v1 v1.28.0
 	gopkg.in/yaml.v2 v2.4.0
 	gotest.tools/v3 v3.0.3 // indirect
-	honnef.co/go/tools v0.2.0
+	honnef.co/go/tools v0.2.2
 	vitess.io/vitess v0.0.0-00010101000000-000000000000
 )
 
