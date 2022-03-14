@@ -36,4 +36,5 @@ import (
 	_ "github.com/cockroachdb/cockroach/pkg/workload/tpcds"
 	_ "github.com/cockroachdb/cockroach/pkg/workload/tpch"
 	_ "github.com/cockroachdb/cockroach/pkg/workload/ycsb"
+	_ "github.com/cockroachdb/cockroach/pkg/workload/social"
 )

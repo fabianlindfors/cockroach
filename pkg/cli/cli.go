@@ -34,6 +34,7 @@ import (
 	_ "github.com/cockroachdb/cockroach/pkg/workload/tpcc"     // registers workloads
 	_ "github.com/cockroachdb/cockroach/pkg/workload/tpch"     // registers workloads
 	_ "github.com/cockroachdb/cockroach/pkg/workload/ycsb"     // registers workloads
+	_ "github.com/cockroachdb/cockroach/pkg/workload/social"     // registers workloads
 	"github.com/cockroachdb/errors"
 	"github.com/spf13/cobra"
 )
