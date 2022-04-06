@@ -19,6 +19,7 @@ type social struct {
 	likesCount int
 
 	readPercentage int
+	splits      int
 }
 
 func init() {
@@ -40,6 +41,7 @@ var socialMeta = workload.Meta{
 		g.flags.IntVar(&g.postsCount, `posts`, 100, `Number of posts to use`)
 		g.flags.IntVar(&g.likesCount, `likes`, 10000, `Number of likes to add initially`)
 		g.flags.IntVar(&g.readPercentage, `read-percentage`, 95, `Percentage of operations which should be reads`)
+		g.flags.IntVar(&g.splits, `splits`, 0, `Number of splits to perform before starting normal operations`)
 
 		g.connFlags = workload.NewConnFlags(&g.flags)
 		return g
@@ -67,6 +69,13 @@ func (g *social) Tables() []workload.Table {
 				return []interface{}{rowIdx, randString()}
 			},
 		),
+		Splits: workload.Tuples(
+			g.splits,
+			func(splitIdx int) []interface{} {
+				step := g.postsCount / (g.splits+1)
+				return []interface{}{step*(splitIdx+1)}
+			},
+		),
 	}
 
 	likesTable := workload.Table{
@@ -82,6 +91,13 @@ func (g *social) Tables() []workload.Table {
 			func(rowIdx int) []interface{} {
 				postId := rand.Intn(g.postsCount)
 				return []interface{}{rowIdx, postId}
+			},
+		),
+		Splits: workload.Tuples(
+			g.splits,
+			func(splitIdx int) []interface{} {
+				step := g.likesCount / (g.splits+1)
+				return []interface{}{step*(splitIdx+1)}
 			},
 		),
 	}
