@@ -143,8 +143,9 @@ func (g *social) Ops(
 	}
 
 	likeStmt, err := db.Prepare(`
-		INSERT INTO likes(post_id)
-		VALUES ($1)
+		UPDATE likes
+		SET post_id = $1
+		WHERE id = $2
 	`)
 	if err != nil {
 		return workload.QueryLoad{}, err
@@ -213,7 +214,8 @@ func (sw *socialWorker) read(ctx context.Context) error {
 
 func (sw *socialWorker) like(ctx context.Context) error {
 	postToLike := rand.Intn(sw.config.postsCount)
-	_, err := sw.likeStmt.ExecContext(ctx, postToLike)
+	likeToUpdate := rand.Intn(sw.config.likesCount)
+	_, err := sw.likeStmt.ExecContext(ctx, postToLike, likeToUpdate)
 	return err
 }
 
