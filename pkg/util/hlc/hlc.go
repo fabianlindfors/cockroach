@@ -291,7 +291,6 @@ func (c *Clock) MaxOffset() time.Duration {
 
 // getPhysicalClockAndCheck reads the physical time as nanos since epoch. It
 // also checks for backwards and forwards jumps, as configured.
-// TODO (fabian): Get timestamp from clockbound instead. Save both earliest and latest bounds.
 func (c *Clock) getPhysicalClockAndCheck(ctx context.Context) trueclock.Bounds {
 	oldTime := atomic.LoadInt64(&c.lastPhysicalTime)
 

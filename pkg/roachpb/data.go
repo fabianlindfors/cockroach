@@ -923,7 +923,6 @@ func MakeTransaction(
 	// TODO(nvanbenschoten): technically, gul should be a synthetic timestamp.
 	// Make this change in v21.2 when all nodes in a cluster are guaranteed to
 	// be aware of synthetic timestamps by addressing the TODO in Timestamp.Add.
-	// gul := now.Add(maxOffsetNs, 0)
 
 	gul := hlc.Timestamp{
 		WallTime:           now.WallTimeUpperBound,
